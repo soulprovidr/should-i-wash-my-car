@@ -16,14 +16,11 @@ if (!ApiKey) {
 
 const Endpoint = `https://api.darksky.net/forecast/${ApiKey}/`;
 
-app.use(cors({
-  origin: (origin, callback) => {
-    if (origin.indexOf('localhost') > -1 || origin === Domain) {
-      return callback(null, true);
-    }
-    return callback(new Error('Not allowed by CORS.'));
-  }
-}));
+const corsOptions = {
+  origin: ['https://shouldiwash.info', 'https://www.shouldiwash.info'],
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 
 app.get('/:latitude/:longitude', (req, res) => {
   const { latitude, longitude } = req.params;
