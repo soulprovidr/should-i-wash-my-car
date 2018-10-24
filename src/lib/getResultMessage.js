@@ -16,6 +16,6 @@ export default function getResultMessage(result) {
     case Results.MAYBE_NO:
       return 'Probably not.';
     case Results.NO:
-      return message = 'No.';
+      return 'No.';
   }
 }

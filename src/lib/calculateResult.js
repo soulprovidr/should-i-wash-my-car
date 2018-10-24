@@ -10,27 +10,27 @@ import { Results } from '../constants';
 export default function calculateResult({ daily }) {
   let result = Results.YES;
 
-  // Check chance of rain over next 3 days.
-  for (let i = 0; i < 3; i++) {
+  // Check chance of rain over next 5 days.
+  for (let i = 0; i < 5; i++) {
     const day = daily.data[i];
 
-    // Between 40% and 60% chance of precipitation.
+    // Between 25% and 40% chance of precipitation.
     if (
-      (0.4 < day.precipProbability) && (day.precipProbability < 0.6)
+      (0.25 < day.precipProbability) && (day.precipProbability < 0.4)
       && result < Results.MAYBE_YES
     ) {
       result = Results.MAYBE_YES;
     }
 
-    // Between 60% and 75% chance of precipitation.
+    // Between 40% and 60% chance of precipitation.
     else if (
-      (0.6 < day.precipProbability) && (day.precipProbability < 0.75) 
+      (0.4 < day.precipProbability) && (day.precipProbability < 0.6) 
       && result < Results.MAYBE_NO) {
       result = Results.MAYBE_NO;
     }
 
-    // Over 75% chance of precipitation.
-    else if (day.precipProbability > 0.75) {
+    // Over 60% chance of precipitation.
+    else if (day.precipProbability > 0.6) {
       result = Results.NO;
     }
   }

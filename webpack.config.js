@@ -17,7 +17,7 @@ module.exports = (env, { mode }) => ({
   plugins: [
     new webpack.DefinePlugin({
       __ENDPOINT__: mode === 'development'
-        ? JSON.stringify(`http://localhost:${process.env.SERVER_PORT}/weather/`)
+        ? JSON.stringify(`http://localhost:${process.env.SERVER_PORT}/`)
         : JSON.stringify('/weather/')
     }),
     new CopyWebpackPlugin([

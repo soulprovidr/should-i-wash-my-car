@@ -19,6 +19,7 @@ const App = {
       App.setScreen(Screens.PERMISSIONS, '(Detecting location...)');
       await App.getResult();
     } catch (e) {
+      console.error(e);
       App.setScreen(Screens.ERROR, e.message);
     }
   },
@@ -59,7 +60,7 @@ m.mount(document.body, {
           m('img.sun', { src: 'sun.gif' }),
           renderMessage('Should I wash my car?', 'title'),
           m('button.start', { onclick: App.initialize }, 'Start'),
-          m('p', App.message),
+          renderMessage(App.message),
           renderBodyClass([App.screen])
         ];
       default:
