@@ -39,4 +39,4 @@ app.get('*', (req, res) => {
   res.status(404).send();
 });
 
-app.listen(process.env.SERVER_PORT || 3000);
+app.listen(ServerPort);
