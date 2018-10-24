@@ -14,54 +14,59 @@ const App = {
   message: null,
   result: null,
   screen: Screens.UNSTARTED,
-  setScreen(screen, message) {
-    App.screen = screen;
-    App.message = message;
-    m.redraw();
-  },
-  async start() {
+  async initialize() {
     try {
       App.setScreen(Screens.PERMISSIONS, '(Detecting location...)');
-      const { coords } = await getLocation();
-      App.setScreen(Screens.ANALYZING, '(Analyzing weather...)');
-      App.result = calculateResult(await getWeather(coords.latitude, coords.longitude));
-      const message = getResultMessage(App.result);
-      App.setScreen(Screens.RESULT, message);
+      await App.getResult();
     } catch (e) {
       App.setScreen(Screens.ERROR, e.message);
     }
+  },
+  async getResult() {
+    const { coords } = await getLocation();
+    App.setScreen(Screens.ANALYZING, '(Analyzing weather...)');
+    const weather = await getWeather(coords.latitude, coords.longitude);
+    App.result = calculateResult(weather);
+    App.setScreen(Screens.RESULT);
+  },
+  setScreen(screen, message = null) {
+    App.screen = screen;
+    if (message) {
+      App.message = message;
+    }
+    m.redraw();
   }
 };
 
+const renderBodyClass = classList => m(BodyClass, { classList });
+const renderMessage = (message, className = '') => (
+  m('p', { class: className }, message)
+);
+
 m.mount(document.body, {
   view: function () {
-    let classList = [];
-    let children = [];
     switch (App.screen) {
-      case Screens.UNSTARTED:
-        children = children.concat([
-          m('img.sun', { src: 'sun.gif' }),
-          m('p.title', 'Should I wash my car?'),
-          m('button.start', { onclick: App.start }, 'Start'),
-          m('p', App.message)
-        ]);
-        break;
       case Screens.RESULT:
-        classList.push(App.screen);
-        classList.push(`${App.screen}--${App.result}`);
-        children = children.concat([
-          m('p.title', App.message)
-        ]);
-        break;
+        return [
+          renderMessage(getResultMessage(App.result), 'title'),
+          renderBodyClass([
+            App.screen,
+            `${App.screen}--${App.result}`
+          ])
+        ];
+      case Screens.UNSTARTED:
+        return [
+          m('img.sun', { src: 'sun.gif' }),
+          renderMessage('Should I wash my car?', 'title'),
+          m('button.start', { onclick: App.initialize }, 'Start'),
+          m('p', App.message),
+          renderBodyClass([App.screen])
+        ];
       default:
-        classList.push(App.screen);
-        children = children.concat([
-          m('p', App.message)
-        ]);
-        break;
+        return [
+          renderMessage(App.message),
+          renderBodyClass([App.screen])
+        ];
     }
-    return children.concat([
-      m(BodyClass, { classList })
-    ]);
   }
 });
