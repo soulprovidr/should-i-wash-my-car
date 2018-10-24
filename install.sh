@@ -18,6 +18,3 @@ sudo apt -y install \
   nginx \
   software-properties-common \
   certbot
-
-# Clone repository.
-git clone https://github.com/soulprovidr/should-i-wash-my-car app

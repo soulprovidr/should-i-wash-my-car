@@ -25,7 +25,7 @@ app.use(cors({
   }
 }));
 
-app.get('/weather/:latitude/:longitude', (req, res) => {
+app.get('/:latitude/:longitude', (req, res) => {
   const { latitude, longitude } = req.params;
   axios.get(
     `${Endpoint}${latitude},${longitude}`,
